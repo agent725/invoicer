@@ -1,0 +1,224 @@
+<html>
+<head>
+<style>
+  body {
+    background: #ffffff;
+  }
+  h1 {
+    font-family: "Courier New", "Lucida Console", Courier, monospace;
+    margin-top: 0.8em;
+  }
+  h3 {
+    margin-left: 0.8em;
+  }
+  table {
+    border-spacing: 1;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+  table * {
+    position: relative;
+  }
+  table td, table th {
+    width: 1em;
+    max-width: 1em;
+    padding-left: 1em;
+  }
+  table thead tr {
+    height: 2em;
+    background: #888888;
+    color: #ffffff;
+  }
+  table tbody tr {
+    height: 2em;
+  }
+  table tbody tr:last-child {
+    border: 0;
+  }
+  table td, table th {
+    text-align: left;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+  }
+  tbody tr {
+    font-family: OpenSans-Regular;
+    font-size: 15px;
+    color: #808080;
+    line-height: 1.2;
+    font-weight: unset;
+  }
+  tbody tr:hover {
+    color: #555555;
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+  .headerright {
+    width: 55%;
+    background: #DDD;
+  }
+  .invoicehead {
+    width: 49.25%;
+    display: block;
+    margin-bottom: 1em;
+  }
+  .payee {
+    width: 49.25%;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .client {
+    width: 49.25%;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 0.5%;
+  }
+  .description {
+    width: 35%;
+  }
+  .details {
+    width: 50%;
+    display: inline-block;
+  }
+  .tax {
+    width: 12%;
+  }
+  .qty {
+    width: 10%;
+  }
+  .price {
+    width: 18%;
+  }
+  .total {
+    color: #333;
+    font-weight: bold;
+  }
+  .termstext {
+    margin-left:  1.5em;
+    margin-right: 1.5em;
+  }
+</style>
+</head>
+<body>
+<h1 id="payeecompany">{{payeeCompany}}</h1>
+<br />
+<div class="invoicehead">
+<table>
+<thead>
+<tr class="header">
+<th align="left">Invoice {{invoiceId}}</th>
+<td class="headerright"></td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><i>Date issued</i></td>
+<td align="left">{{dateIssuedYear}}.{{dateIssuedMonth}}.{{dateIssuedDay}}</td>
+</tr>
+<tr class="even">
+<td align="left"><i>Date due</i></td>
+<td align="left">{{dateDueYear}}.{{dateDueMonth}}.{{dateDueDay}}</td>
+</tr>
+</tbody>
+</table>
+</div>
+<br />
+<div class="payee">
+<table>
+<thead>
+<tr class="header">
+<th align="left">Payee information</th>
+<td class="headerright"></td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><i>Identification</i></td>
+<td align="left">{{payeeId}}</td>
+</tr>
+<tr class="even">
+<td align="left"><i>Registration</i></td>
+<td align="left">{{payeeReg}}</td>
+</tr>
+<tr class="odd">
+<td align="left"><i>Account</i></td>
+<td align="left">{{payeeAccount}}</td>
+</tr>
+<tr class="even">
+<td align="left"><i>E-mail</i></td>
+<td align="left">{{payeeEmail}}</td>
+</tr>
+<tr class="odd">
+<td align="left"><i>Street</i></td>
+<td align="left">{{payeeStreet}}</td>
+</tr>
+<tr class="even">
+<td align="left"><i>Zip code</i></td>
+<td align="left">{{payeeZip}}</td>
+</tr>
+<tr class="odd">
+<td align="left"><i>City</i></td>
+<td align="left">{{payeeCity}}</td>
+</tr>
+<tr class="even">
+<td align="left"><i>Country</i></td>
+<td align="left">{{payeeCountry}}</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="client">
+<table>
+<thead>
+<tr class="header">
+<th align="left">Client information</th>
+<td class="headerright"></td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><i>Identification</i></td>
+<td align="left">{{clientId}}</td>
+</tr>
+<tr class="even">
+<td align="left"><i>Registration</i></td>
+<td align="left">{{clientReg}}</td>
+</tr>
+<tr class="odd">
+<td align="left"><i>Contact</i></td>
+<td align="left">{{clientContact}}</td>
+</tr>
+<tr class="even">
+<td align="left"><i>E-mail</i></td>
+<td align="left">{{clientEmail}}</td>
+</tr>
+<tr class="odd">
+<td align="left"><i>Street</i></td>
+<td align="left">{{clientStreet}}</td>
+</tr>
+<tr class="even">
+<td align="left"><i>Zip code</i></td>
+<td align="left">{{clientZip}}</td>
+</tr>
+<tr class="odd">
+<td align="left"><i>City</i></td>
+<td align="left">{{clientCity}}</td>
+</tr>
+<tr class="even">
+<td align="left"><i>Country</i></td>
+<td align="left">{{clientCountry}}</td>
+</tr>
+</tbody>
+</table>
+</div>
+<br />
+<h3>Payment</h3>
+<p>{{invoiceTable}}</p>
+<h3>Terms</h3>
+<p class="termstext"><small>We require you to make this invoice payable within 14 days. Please communicate in advance if you are unable to pay on time. You are advised that a late payment may incur a fine, and a monetary penalty of up to 15% of the invoice. Please mention the invoice number and your company name on record. We kindly thank you for your patronage.</small></p>
+</body></html>

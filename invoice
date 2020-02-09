@@ -1,0 +1,55 @@
+#!/bin/sh
+OLDPATH="$PATH"
+REALPATH="`realpath $0`"
+WHEREAMI="`dirname $REALPATH`"
+export PATH="$WHEREAMI/node_binaries/bin:$PATH"
+
+if [ -z "$1" ]; then
+  echo ""
+  echo "Welcome to Invoicer. A command line tool to make invoices."
+  echo "Type:  invoice help  ...to find out how to use this tool."
+  echo ""
+  exit 0
+else
+ INFILE="`realpath $1`"
+fi
+
+if [ "$1" = "help" ]; then
+  echo ""
+  echo "To preview an invoice, please specify a JSON file as input for the invoice!"
+  echo "Example: invoice invoice_example.json"
+  echo ""
+  echo "To make your own invoice file, look at invoice_example.json for an example."
+  echo ""
+  echo ""
+  echo "Other handy ways to use invoice are:"
+  echo " invoice file.json pdf           ->  this creates a PDF"
+  echo " invoice file.json pdf template  ->  this creates a PDF with another template"
+  echo " invoice file.json paid          ->  sets the invoice to paid status"
+  echo ""
+  exit 0
+fi
+
+cd "$WHEREAMI"
+
+TMPLDEFAULT="html"
+TEMPLATE="$3"
+
+if [ -z "$2" ]; then
+  if [ -z "$3" ]; then TEMPLATE="markup"; fi
+  node invoice.js -i "$INFILE" -t $TEMPLATE | pandoc --wrap=auto -t markdown_mmd
+else
+  if [ "$2" = "html" ]; then
+    if [ -z "$3" ]; then TEMPLATE="$TMPLDEFAULT"; fi
+    node invoice.js -i "$INFILE" -t $TEMPLATE
+  fi
+  if [ "$2" = "pdf" ]; then
+    if [ -z "$3" ]; then TEMPLATE="$TMPLDEFAULT"; fi
+    echo "Saving invoice to $1.pdf (using template '$TEMPLATE')"
+    node invoice.js -i "$INFILE" -t $TEMPLATE > __tmp.html && wkhtmltopdf __tmp.html "$INFILE.pdf"
+    rm __tmp.html > /dev/null
+  fi
+fi
+
+cd - > /dev/null
+PATH="$OLDPATH"

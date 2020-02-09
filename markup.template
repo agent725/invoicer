@@ -1,0 +1,57 @@
+ 
+ {{payeeCompany}}
+===
+
+Invoice: {{invoiceId}},  issued:	{{dateIssuedYear}}.{{dateIssuedMonth}}.{{dateIssuedDay}},  due: {{dateDueYear}}.{{dateDueMonth}}.{{dateDueDay}}
+
+Payee
+---
+
+|Information|
+|-|-|
+|Identification:|{{payeeId}}|
+|Registration:|{{payeeReg}}|
+|Account:|{{payeeAccount}}|
+|E-mail:|{{payeeEmail}}|
+
+|Address|
+|-|
+|{{payeeStreet}}|
+|{{payeeZip}}|
+|{{payeeCity}}|
+|{{payeeCountry}}|
+
+Client
+---
+
+|Information|
+|-|-|
+|Identification:|{{clientId}}|
+|Registration:|{{clientReg}}|
+|Contact:|{{clientContact}}|
+|E-mail:|{{clientEmail}}|
+
+|Address|
+|-|
+|{{clientStreet}}|
+|{{clientZip}}|
+|{{clientCity}}|
+|{{clientCountry}}|
+
+- - - - -
+
+Payment
+---
+
+{{invoiceTable}}
+
+- - - - -
+
+Terms
+---
+
+We require you to make this invoice payable within 14 days. Please communicate
+in advance if you are unable to pay on time. You are advised that a late
+payment may incur a fine, and a monetary penalty of up to 15% of the invoice.
+Please mention the invoice number and your company name on record.
+We kindly thank you for your patronage.

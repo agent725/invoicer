@@ -1,0 +1,31 @@
+{
+  "invoiceId":"00000001",
+  "dateIssued":"2018.10.17",
+  "daysDue":"14",
+  "clientId":"Metasync B.V.",
+  "clientReg":"KVK-09191852 / BTW-NL820338679B01",
+  "clientContact":"Robert de Groot",
+  "clientEmail":"contact@metasync.net",
+  "clientStreet":"Monnetsingel 39",
+  "clientZip":"6716 RA",
+  "clientCity":"Ede",
+  "clientCountry":"The Netherlands",
+  "list":[
+    {
+      "item":"TEST A.0.0",
+      "detailA":"Contents",
+      "detailB":"Sandelhout Bergamot (EO)",
+      "unit":"hr",
+      "cost":40,
+      "qty":2,
+      "tax":21
+    },
+    {
+      "item":"TEST B.0.1",
+      "unit":"hr",
+      "cost":20,
+      "qty":3,
+      "tax":21
+    }
+  ]
+}

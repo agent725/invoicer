@@ -1,0 +1,5 @@
+{
+ "head":"<table><thead><tr class='header'><th class='description'>Description</th><th>Cost</th><th class='qty'>Qty</th><th>Unit</th><th class='tax'>Tax</th><th class='price'>Price</th></tr></thead><tbody>",
+ "body":"<tr><td>{{table_item}}<br><small><div class='details'>{{table_detailA}}</div>{{table_detailB}}</small></td><td>EUR {{table_cost}}</td><td>{{table_qty}}</td><td>{{table_unit}}</td><td>{{table_tax}}%</td><td>EUR {{table_price}}</tr>\n",
+ "foot":"<tr></td><td></td><td></td><td></td><td></td><td><i>Taxes</i></td><td>EUR {{table_taxes}}</td></tr> <tr></td><td></td><td></td><td></td><td></td><td><i>Subtotal</i></td><td>EUR {{table_subtotal}}</td></tr> <tr></td><td></td><td></td><td></td><td></td><td class='total'><i>Total</i></td><td class='total'>EUR {{table_total}}</td></tr> </tbody><table>"
+}

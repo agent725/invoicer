@@ -1,0 +1,5 @@
+{
+ "head":"|Description|Cost|Qty|Unit|Tax|Price|\n|:-|-:|-:|:-:|-:|-:|\n",
+ "body":"|{{table_item}}|€ {{table_cost}}|{{table_qty}}|{{table_unit}}|{{table_tax}}%|€ {{table_price}}|\n",
+ "foot":"|||||||\n|||||Taxes|€ {{table_taxes}}|\n|||||Subtotal|€ {{table_subtotal}}|\n|||||TOTAL|€ {{table_total}}|"
+}
