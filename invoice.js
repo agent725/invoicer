@@ -86,6 +86,11 @@ invoice.output = replaceBulk(invoice.output,
               ['{{taxes}}','{{subtotal}}','{{total}}'],
               [invoice.taxes,invoice.subtotal,invoice.total]);
 
+if (ops.template) {
+  var path = require('path').dirname(ops.template);
+  invoice.output = invoice.output.replace('{{PATH}}',path);
+}
+
 console.log(invoice.output);
 
 //

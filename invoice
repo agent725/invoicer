@@ -1,5 +1,6 @@
 #!/bin/sh
 OLDPATH="$PATH"
+THISPATH="`pwd`"
 REALPATH="`realpath $0`"
 WHEREAMI="`dirname $REALPATH`"
 export PATH="$WHEREAMI/node_binaries/bin:$PATH"
@@ -37,16 +38,16 @@ TEMPLATE="$3"
 
 if [ -z "$2" ]; then
   if [ -z "$3" ]; then TEMPLATE="markup"; fi
-  node invoice.js -i "$INFILE" -t $TEMPLATE | pandoc --wrap=auto -t markdown_mmd
+  node invoice.js -i "$INFILE" -t "$THISPATH/$TEMPLATE" | pandoc --wrap=auto -t markdown_mmd
 else
   if [ "$2" = "html" ]; then
     if [ -z "$3" ]; then TEMPLATE="$TMPLDEFAULT"; fi
-    node invoice.js -i "$INFILE" -t $TEMPLATE
+    node invoice.js -i "$INFILE" -t "$THISPATH/$TEMPLATE"
   fi
   if [ "$2" = "pdf" ]; then
     if [ -z "$3" ]; then TEMPLATE="$TMPLDEFAULT"; fi
     echo "Saving invoice to $1.pdf (using template '$TEMPLATE')"
-    node invoice.js -i "$INFILE" -t $TEMPLATE > __tmp.html && wkhtmltopdf __tmp.html "$INFILE.pdf"
+    node invoice.js -i "$INFILE" -t "$THISPATH/$TEMPLATE" > __tmp.html && wkhtmltopdf --enable-local-file-access __tmp.html "$INFILE.pdf"
     rm __tmp.html > /dev/null
   fi
 fi
