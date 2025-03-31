@@ -1,0 +1,35 @@
+{
+  "timeframe": "2025Q1",
+  "list":[
+      {
+        "invoiceId":"ABC1207884-21064",
+        "dateIssued":"2025.01.02",
+        "subtotal":21.98,
+        "tax":21
+      },
+      {
+        "invoiceId":"ABC1208841-21064",
+        "dateIssued":"2025.01.06",
+        "subtotal":15,
+        "tax":21
+      },
+      {
+        "invoiceId":"ABC1209550-21064",
+        "dateIssued":"2025.01.13",
+        "subtotal":96,
+        "tax":21
+      },
+      {
+        "invoiceId":"ABC1209897-21064",
+        "dateIssued":"2025.01.15",
+        "subtotal":192,
+        "tax":21
+      },
+      {
+        "invoiceId":"ABC1218034-21064",
+        "dateIssued":"2025.03.25",
+        "subtotal":27.44,
+        "tax":21
+      }
+  ]
+}
