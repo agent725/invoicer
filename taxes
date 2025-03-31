@@ -1,0 +1,57 @@
+#!/bin/sh
+OLDPATH="$PATH"
+THISPATH="`pwd`"
+REALPATH="`realpath $0`"
+WHEREAMI="`dirname $REALPATH`"
+export PATH="$WHEREAMI/node_binaries/bin:$PATH"
+
+if [ -z "$1" ]; then
+  echo ""
+  echo "Welcome to Taxes. A command line tool to help you calculate taxes using your invoices and bills."
+  echo "Type:  taxes help  ...to find out how to use this tool."
+  echo ""
+  exit 0
+else
+ REALPATH="`realpath .`"
+ TIMEFRAME="$1"
+fi
+
+if [ "$1" = "help" ]; then
+  echo ""
+  echo "To generate tax balances, you must have two directories in the same root: ./invoices and ./bills"
+  echo "To print out your balance, first go to your invoices or bills directory, then specify the year"
+  echo " and quarter in the format YYYYQN, or simply the year."
+  echo "Example:"
+  echo " cd invoices"
+  echo "taxes 2025Q1"
+  echo ""
+  echo "Other handy ways to use taxes are:"
+  echo " taxes 2025Q1 pdf           ->  this creates a PDF"
+  echo " taxes 2025Q1 pdf template  ->  this creates a PDF with another template"
+  echo ""
+  exit 0
+fi
+
+cd "$WHEREAMI"
+
+TMPLDEFAULT="html"
+TEMPLATE="$3"
+
+if [ -z "$2" ]; then
+  if [ -z "$3" ]; then TEMPLATE="markup"; fi
+  node taxes.js -d "$REALPATH" -f "$TIMEFRAME" -t "$TEMPLATE" | pandoc --wrap=auto -t markdown_mmd
+else
+  if [ "$2" = "html" ]; then
+    if [ -z "$3" ]; then TEMPLATE="$TMPLDEFAULT"; fi
+    node taxes.js -d "$REALPATH" -f "$TIMEFRAME" -t "$TEMPLATE"
+  fi
+  if [ "$2" = "pdf" ]; then
+    if [ -z "$3" ]; then TEMPLATE="$TMPLDEFAULT"; fi
+    echo "Saving tax balance to $1.pdf (using template '$TEMPLATE')"
+    node taxes.js -d "$REALPATH" -f "$TIMEFRAME" -t "$TEMPLATE" > __tmp.html && wkhtmltopdf --enable-local-file-access __tmp.html "$TIMEFRAME.pdf"
+    rm __tmp.html > /dev/null
+  fi
+fi
+
+cd - > /dev/null
+PATH="$OLDPATH"
