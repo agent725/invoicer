@@ -30,10 +30,22 @@ function formatNumber(n) {
 }
 
 // format tax object for display
-function displayTaxes(taxes) {
+function displayIncomeTaxes(taxes) {
   let outString = '';
   for (tax in taxes) {
-    outString += `            ${tax}% -> ${currency} ${formatNumber(taxes[tax])}`+"\n";
+    outString += `              [${tax}%]`+"\n";
+    outString += `                ${currency} ${taxes[tax].net} net profit`+"\n";
+    outString += `                ${currency} ${taxes[tax].tax} taxes`+"\n";
+    // DEBUG: outString += `                ${JSON.stringify(taxes)}`+"\n";
+  }
+  return outString;
+}
+
+function displayExpenseTaxes(taxes) {
+  let outString = '';
+  for (tax in taxes) {
+    outString += `              [${tax}%]`+"\n";
+    outString += `                ${currency} ${taxes[tax]}`+"\n";
   }
   return outString;
 }
@@ -89,17 +101,22 @@ function calculateInvoice(invoicesData) {
     line  = invoicesData.list[i];
     invoices.subtotal = invoices.subtotal+(line.cost*line.qty);
     if(typeof line.tax==='undefined' || isNaN(line.tax)) { line.tax = invoicesSetup.taxdefault; }
-    if (!invoices.taxes.hasOwnProperty(line.tax)) invoices.taxes[line.tax] = 0;
-    invoices.taxes[line.tax] += ((line.cost*line.qty)*(line.tax/100));
+    if (!invoices.taxes.hasOwnProperty(line.tax)) invoices.taxes[line.tax] = { tax:0, net:0 };
+    invoices.taxes[line.tax].net += line.cost * line.qty;
+    invoices.taxes[line.tax].tax += invoices.taxes[line.tax].net * (line.tax/100);
   }
   for (const taxline in invoices.taxes) {
-    invoices.total += invoices.subtotal+invoices.taxes[taxline];
+    invoices.total += invoices.subtotal+invoices.taxes[taxline].tax;
   }
   
   // format totals
   invoices.total = formatNumber(invoices.total);
   invoices.subtotal = formatNumber(invoices.subtotal);
-  Object.keys(invoices.taxes).forEach( function(key, index) { invoices.taxes[key] = formatNumber(invoices.taxes[key]); });
+  Object.keys(invoices.taxes).forEach( function(key, index) {
+    invoices.taxes[key].net = formatNumber(invoices.taxes[key].net);
+    invoices.taxes[key].tax = formatNumber(invoices.taxes[key].tax);
+  });
+
   return invoices;
 }
 
@@ -138,21 +155,22 @@ let income = {
 }
 for (const file of files) {
   if (file.endsWith('.json')) {  // read every invoice here and add up their totals
-    const expensesData = JSON.parse(fs.readFileSync(`${directory}invoices/${file}`, 'utf8'));
-    if (expensesData.hasOwnProperty('dateIssued')) {
-      const dateIssued = new Date(expensesData.dateIssued);
+    const invoicesData = JSON.parse(fs.readFileSync(`${directory}invoices/${file}`, 'utf8'));
+    if (invoicesData.hasOwnProperty('dateIssued')) {
+      const dateIssued = new Date(invoicesData.dateIssued);
       if (dateIssued>frameStart && dateIssued<frameEnd) {
         //console.warn(file);
-        //console.warn(JSON.stringify(expensesData));
-        //console.warn( JSON.stringify( calculateInvoice(expensesData) ) );
-        const expensesTotals = calculateInvoice(expensesData);
+        //console.warn(JSON.stringify(invoicesData));
+        //console.warn( JSON.stringify( calculateInvoice(invoicesData) ) );
+        const invoicesTotals = calculateInvoice(invoicesData);
         income.invoices ++;
-        income.subtotal += Number(expensesTotals.subtotal);
-        income.total += Number(expensesTotals.total);
-        Object.keys(expensesTotals.taxes).forEach( function(key, index) {
-          if (!income.taxes.hasOwnProperty(key)) income.taxes[key] = 0;
-          income.taxes[key] += Number(expensesTotals.taxes[key]);
-          income.taxtotal += income.taxes[key];
+        income.subtotal += Number(invoicesTotals.subtotal);
+        income.total += Number(invoicesTotals.total);
+        Object.keys(invoicesTotals.taxes).forEach( function(key, index) {
+          if (!income.taxes.hasOwnProperty(key)) income.taxes[key] = { net:0, tax:0 };
+          income.taxes[key].net += Number(invoicesTotals.taxes[key].net);
+          income.taxes[key].tax += Number(invoicesTotals.taxes[key].tax);
+          income.taxtotal += income.taxes[key].tax;
         });
       }
     }
@@ -200,14 +218,14 @@ for (const file of files) {
 console.warn( "\n\nINCOME \n\n"+
               `  Invoices: ${income.invoices}\n\n`+
               `  Subtotal: ${currency} ${formatNumber(income.subtotal)}\n`+
-              `  Taxes:    ${currency} ${formatNumber(income.taxtotal)}\n${displayTaxes(income.taxes)}\n`+
+              `  Taxes:    ${currency} ${formatNumber(income.taxtotal)}\n${displayIncomeTaxes(income.taxes)}\n`+
               `  Total:    ${currency} ${formatNumber(income.total)}\n`
             );
 
 console.warn( "\nEXPENSES \n\n"+
               `  Bills:    ${expenses.bills}\n\n`+
               `  Subtotal: ${currency} ${formatNumber(expenses.subtotal)}\n`+
-              `  Taxes:    ${currency} ${formatNumber(expenses.taxtotal)}\n${displayTaxes(expenses.taxes)}\n`+
+              `  Taxes:    ${currency} ${formatNumber(expenses.taxtotal)}\n${displayExpenseTaxes(expenses.taxes)}\n`+
               `  Total:    ${currency} ${formatNumber(expenses.total)}\n`
             );
 
