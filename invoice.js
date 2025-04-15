@@ -73,8 +73,8 @@ var dateDue = {
     }
 
 invoice.output = invoice.output+replaceBulk(String(invoice.template),
-                 ['{{payeeCompany}}','{{invoiceId}}','{{dateIssuedYear}}','{{dateIssuedMonth}}','{{dateIssuedDay}}','{{dateDueYear}}','{{dateDueMonth}}','{{dateDueDay}}','{{payeeId}}','{{payeeReg}}','{{payeeAccount}}','{{payeeEmail}}','{{payeeStreet}}','{{payeeZip}}','{{payeeCity}}','{{payeeCountry}}'],
-                 [invoice.setup.payeeCompany,invoice.billing.invoiceId,dateIssued.y,dateIssued.m,dateIssued.d,dateDue.y,dateDue.m,dateDue.d,invoice.setup.payeeId,invoice.setup.payeeReg,invoice.setup.payeeAccount,invoice.setup.payeeEmail,invoice.setup.payeeStreet,invoice.setup.payeeZip,invoice.setup.payeeCity,invoice.setup.payeeCountry]);
+                 ['{{payeeCompany}}','{{invoiceId}}','{{dateIssuedYear}}','{{dateIssuedMonth}}','{{dateIssuedDay}}','{{dateDueYear}}','{{dateDueMonth}}','{{dateDueDay}}','{{payeeId}}','{{payeeReg}}','{{payeeVAT}}','{{payeeAccount}}','{{payeeEmail}}','{{payeeStreet}}','{{payeeZip}}','{{payeeCity}}','{{payeeCountry}}'],
+                 [invoice.setup.payeeCompany,invoice.billing.invoiceId,dateIssued.y,dateIssued.m,dateIssued.d,dateDue.y,dateDue.m,dateDue.d,invoice.setup.payeeId,invoice.setup.payeeReg,invoice.setup.payeeVAT,invoice.setup.payeeAccount,invoice.setup.payeeEmail,invoice.setup.payeeStreet,invoice.setup.payeeZip,invoice.setup.payeeCity,invoice.setup.payeeCountry]);
 
 invoice.output = invoice.output.replace('{{invoiceTable}}',table);
 
