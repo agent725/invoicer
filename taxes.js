@@ -126,7 +126,7 @@ function calculateExpenses(expenseData) {
     subtotal:0,
     taxes:{},
     total:0
-  }  
+  }
   for(i=0;i<expenseData.length;i++) {
     line  = expenseData[i];
     expense.subtotal += line.subtotal;
@@ -158,7 +158,7 @@ for (const file of files) {
     const invoicesData = JSON.parse(fs.readFileSync(`${directory}invoices/${file}`, 'utf8'));
     if (invoicesData.hasOwnProperty('dateIssued')) {
       const dateIssued = new Date(invoicesData.dateIssued);
-      if (dateIssued>frameStart && dateIssued<frameEnd) {
+      if (dateIssued>=frameStart && dateIssued<=frameEnd) {
         //console.warn(file);
         //console.warn(JSON.stringify(invoicesData));
         //console.warn( JSON.stringify( calculateInvoice(invoicesData) ) );
@@ -194,7 +194,7 @@ for (const file of files) {
       for (const expense of expensesData.list) {
         if (expense.hasOwnProperty('dateIssued')) {
           const dateIssued = new Date(expense.dateIssued);
-          if (dateIssued>frameStart && dateIssued<frameEnd) {
+          if (dateIssued>=frameStart && dateIssued<=frameEnd) {
             expensesInFrame.push(expense);
           }
         }
@@ -204,7 +204,7 @@ for (const file of files) {
     //console.warn(JSON.stringify(expensesData));
     //console.warn( JSON.stringify( calculateExpenses(expensesInFrame) ) );
     const expenseTotals = calculateExpenses(expensesInFrame);
-    if (expensesInFrame.length > 0) expenses.bills ++;
+    if (expensesInFrame.length > 0) expenses.bills += expensesInFrame.length;
     expenses.subtotal += Number(expenseTotals.subtotal);
     expenses.total += Number(expenseTotals.total);
     Object.keys(expenseTotals.taxes).forEach( function(key, index) {
@@ -232,5 +232,5 @@ console.warn( "\nEXPENSES \n\n"+
 console.warn( "\nRESULTS \n\n"+
               `  Net profit:   ${currency} ${formatNumber(income.subtotal - expenses.subtotal)}\n`+
               `  Gross profit: ${currency} ${formatNumber(income.total - expenses.total)}\n`+
-              `  Tax owed:     ${currency} ${formatNumber(income.taxtotal - expenses.taxtotal)}\n`
+              `  Tax owed:     ${currency} ${formatNumber(income.subtotal - expenses.taxtotal)}\n`
             );
