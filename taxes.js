@@ -98,7 +98,8 @@ function calculateInvoice(invoicesData) {
     total:0
   }  
   for(i=0;i<invoicesData.list.length;i++) {
-    line  = invoicesData.list[i];
+    line = invoicesData.list[i];
+    if (invoicesData.hasOwnProperty('daysDue') && invoicesData.daysDue < 0) line.cost = line.cost * -1;
     invoices.subtotal = invoices.subtotal+(line.cost*line.qty);
     if(typeof line.tax==='undefined' || isNaN(line.tax)) { line.tax = invoicesSetup.taxdefault; }
     if (!invoices.taxes.hasOwnProperty(line.tax)) invoices.taxes[line.tax] = { tax:0, net:0 };

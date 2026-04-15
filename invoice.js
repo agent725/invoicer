@@ -27,6 +27,11 @@ var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 var dateIssued = invoice.billing.dateIssued.split('.');
 invoice.dateIssued = new Date(dateIssued[0],(dateIssued[1]-1),dateIssued[2]);
 invoice.dateDue = new Date(Math.round(Math.abs(invoice.dateIssued.getTime()+(invoice.billing.daysDue*oneDay))));
+if (invoice.billing.daysDue >= 0) {
+  invoice.credit = '';
+} else {
+  invoice.credit = 'Credit ';
+}
 
 // create table of items
 var table = String(invoice.table.head);
@@ -36,6 +41,7 @@ for(i=0;i<invoice.billing.list.length;i++) {
   if(typeof line.detailA === 'undefined') { line.detailA=''; }
   if(typeof line.detailB === 'undefined') { line.detailB=''; }
   if(typeof line.detailC === 'undefined') { line.detailC=''; }
+  if (invoice.credit) line.cost = line.cost * -1; 
   table = table+replaceBulk(invoice.table.body,
                 ['{{table_item}}','{{table_detailA}}','{{table_detailB}}','{{table_detailC}}','{{table_cost}}','{{table_qty}}','{{table_unit}}','{{table_tax}}','{{table_price}}'],
                 [line.item,line.detailA,line.detailB,line.detailC,
@@ -44,7 +50,7 @@ for(i=0;i<invoice.billing.list.length;i++) {
                  line.tax,
                  formatNumber(line.cost*line.qty)
                 ]);
-  invoice.subtotal = invoice.subtotal+(line.cost*line.qty);
+  invoice.subtotal = invoice.subtotal + (line.cost*line.qty);
   if(typeof line.tax==='undefined' || isNaN(line.tax)) { line.tax = invoice.setup.taxdefault; }
   invoice.taxes = invoice.taxes+((line.cost*line.qty)*(line.tax/100));
 }
@@ -72,9 +78,13 @@ var dateDue = {
       d:('00'+invoice.dateDue.getDate()).slice(-2)
     }
 
+if (typeof invoice.billing.details === 'undefined') invoice.billing.details = '';
+else if (invoice.setup.type.substr(-6) === 'markup') invoice.billing.details = invoice.billing.details.replace('<br>',' / ');
+else invoice.billing.details = `<p class="details">${invoice.billing.details}</p> `;
+
 invoice.output = invoice.output+replaceBulk(String(invoice.template),
-                 ['{{payeeCompany}}','{{invoiceId}}','{{dateIssuedYear}}','{{dateIssuedMonth}}','{{dateIssuedDay}}','{{dateDueYear}}','{{dateDueMonth}}','{{dateDueDay}}','{{payeeId}}','{{payeeReg}}','{{payeeVAT}}','{{payeeAccount}}','{{payeeEmail}}','{{payeeStreet}}','{{payeeZip}}','{{payeeCity}}','{{payeeCountry}}'],
-                 [invoice.setup.payeeCompany,invoice.billing.invoiceId,dateIssued.y,dateIssued.m,dateIssued.d,dateDue.y,dateDue.m,dateDue.d,invoice.setup.payeeId,invoice.setup.payeeReg,invoice.setup.payeeVAT,invoice.setup.payeeAccount,invoice.setup.payeeEmail,invoice.setup.payeeStreet,invoice.setup.payeeZip,invoice.setup.payeeCity,invoice.setup.payeeCountry]);
+                 ['{{credit}}','{{details}}','{{payeeCompany}}','{{invoiceId}}','{{dateIssuedYear}}','{{dateIssuedMonth}}','{{dateIssuedDay}}','{{dateDueYear}}','{{dateDueMonth}}','{{dateDueDay}}','{{payeeId}}','{{payeeReg}}','{{payeeVAT}}','{{payeeAccount}}','{{payeeEmail}}','{{payeeStreet}}','{{payeeZip}}','{{payeeCity}}','{{payeeCountry}}'],
+                 [invoice.credit,invoice.billing.details,invoice.setup.payeeCompany,invoice.billing.invoiceId.split('-')[0],dateIssued.y,dateIssued.m,dateIssued.d,dateDue.y,dateDue.m,dateDue.d,invoice.setup.payeeId,invoice.setup.payeeReg,invoice.setup.payeeVAT,invoice.setup.payeeAccount,invoice.setup.payeeEmail,invoice.setup.payeeStreet,invoice.setup.payeeZip,invoice.setup.payeeCity,invoice.setup.payeeCountry]);
 
 invoice.output = invoice.output.replace('{{invoiceTable}}',table);
 

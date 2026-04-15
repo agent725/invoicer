@@ -98,6 +98,10 @@
     color: #333;
     font-weight: bold;
   }
+  .details {
+    margin-left:  1.5em;
+    margin-right: 1.5em;
+  }
   .termstext {
     margin-left:  1.5em;
     margin-right: 1.5em;
@@ -111,7 +115,7 @@
 <table>
 <thead>
 <tr class="header">
-<th align="left">Invoice {{invoiceId}}</th>
+<th align="left">{{credit}}Invoice {{invoiceId}}</th>
 <td class="headerright"></td>
 </tr>
 </thead>
@@ -218,6 +222,7 @@
 </div>
 <br />
 <h3>Payment</h3>
+{{details}}
 <p>{{invoiceTable}}</p>
 <h3>Terms</h3>
 <p class="termstext"><small>We require you to make this invoice payable within 14 days. Please communicate in advance if you are unable to pay on time. You are advised that a late payment may incur a fine, and a monetary penalty of up to 15% of the invoice. Please mention the invoice number and your company name on record. We kindly thank you for your patronage.</small></p>

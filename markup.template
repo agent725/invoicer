@@ -1,8 +1,8 @@
- 
+
  {{payeeCompany}}
 ===
 
-Invoice: {{invoiceId}},  issued:	{{dateIssuedYear}}.{{dateIssuedMonth}}.{{dateIssuedDay}},  due: {{dateDueYear}}.{{dateDueMonth}}.{{dateDueDay}}
+{{Credit}}Invoice: {{invoiceId}},  issued:	{{dateIssuedYear}}.{{dateIssuedMonth}}.{{dateIssuedDay}},  due: {{dateDueYear}}.{{dateDueMonth}}.{{dateDueDay}}
 
 Payee
 ---
@@ -42,6 +42,8 @@ Client
 
 Payment
 ---
+
+{{details}}
 
 {{invoiceTable}}
 
