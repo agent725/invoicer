@@ -139,8 +139,9 @@ function calculateExpenses(expenseData) {
     if (!expense.taxes.hasOwnProperty(line.tax)) expense.taxes[line.tax] = 0;
     expense.taxes[line.tax] += (line.subtotal*(line.tax/100));
   }
+  expense.total += expense.subtotal;
   for (const taxline in expense.taxes) {
-    expense.total += expense.subtotal+expense.taxes[taxline];
+    expense.total += expense.taxes[taxline];
   }
   // format totals
   expense.total = formatNumber(expense.total);
@@ -237,5 +238,5 @@ console.warn( "\nEXPENSES \n\n"+
 console.warn( "\nRESULTS \n\n"+
               `  Net profit:   ${currency} ${formatNumber(income.subtotal - expenses.subtotal)}\n`+
               `  Gross profit: ${currency} ${formatNumber(income.total - expenses.total)}\n`+
-              `  Tax owed:     ${currency} ${formatNumber(income.subtotal - expenses.taxtotal)}\n`
+              `  Tax owed:     ${currency} ${formatNumber(income.taxtotal - expenses.taxtotal)}\n`
             );
