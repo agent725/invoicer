@@ -90,6 +90,10 @@ if (!frameStart || !frameEnd) {
 
 console.warn(`[i] Calculating taxes from ${toSimpleDate(frameStart)} to ${toSimpleDate(frameEnd)}.`);
 
+function isCreditInvoice(invoicesData) {
+  return invoicesData.hasOwnProperty('daysDue') && invoicesData.daysDue < 0;
+}
+
 function calculateInvoice(invoicesData) {
   let line, invoices = {
     id:invoicesData.invoicesId,
@@ -99,7 +103,7 @@ function calculateInvoice(invoicesData) {
   }  
   for(i=0;i<invoicesData.list.length;i++) {
     line = invoicesData.list[i];
-    if (invoicesData.hasOwnProperty('daysDue') && invoicesData.daysDue < 0) line.cost = line.cost * -1;
+    if (isCreditInvoice(invoicesData)) line.cost = line.cost * -1;
     invoices.subtotal = invoices.subtotal+(line.cost*line.qty);
     if(typeof line.tax==='undefined' || isNaN(line.tax)) { line.tax = invoicesSetup.taxdefault; }
     if (!invoices.taxes.hasOwnProperty(line.tax)) invoices.taxes[line.tax] = { tax:0, net:0 };
@@ -107,7 +111,7 @@ function calculateInvoice(invoicesData) {
     invoices.taxes[line.tax].tax += invoices.taxes[line.tax].net * (line.tax/100);
   }
   for (const taxline in invoices.taxes) {
-    invoices.total += invoices.subtotal+invoices.taxes[taxline].tax;
+    invoices.total += invoices.subtotal + invoices.taxes[taxline].tax;
   }
   
   // format totals
@@ -171,7 +175,7 @@ for (const file of files) {
           if (!income.taxes.hasOwnProperty(key)) income.taxes[key] = { net:0, tax:0 };
           income.taxes[key].net += Number(invoicesTotals.taxes[key].net);
           income.taxes[key].tax += Number(invoicesTotals.taxes[key].tax);
-          income.taxtotal += income.taxes[key].tax;
+          if(income.taxes[key].tax > 0) income.taxtotal += income.taxes[key].tax;
         });
       }
     }
