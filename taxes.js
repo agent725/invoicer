@@ -35,7 +35,7 @@ function displayIncomeTaxes(taxes) {
   for (tax in taxes) {
     outString += `              [${tax}%]`+"\n";
     outString += `                ${currency} ${taxes[tax].net} net profit`+"\n";
-    outString += `                ${currency} ${taxes[tax].tax} taxes`+"\n";
+    outString += `                ${currency} ${formatNumber(taxes[tax].tax)} taxes`+"\n";
     // DEBUG: outString += `                ${JSON.stringify(taxes)}`+"\n";
   }
   return outString;
@@ -45,7 +45,7 @@ function displayExpenseTaxes(taxes) {
   let outString = '';
   for (tax in taxes) {
     outString += `              [${tax}%]`+"\n";
-    outString += `                ${currency} ${taxes[tax]}`+"\n";
+    outString += `                ${currency} ${formatNumber(taxes[tax])}`+"\n";
   }
   return outString;
 }
@@ -175,8 +175,9 @@ for (const file of files) {
         Object.keys(invoicesTotals.taxes).forEach( function(key, index) {
           if (!income.taxes.hasOwnProperty(key)) income.taxes[key] = { net:0, tax:0 };
           income.taxes[key].net += Number(invoicesTotals.taxes[key].net);
-          income.taxes[key].tax += Number(invoicesTotals.taxes[key].tax);
-          if(income.taxes[key].tax > 0) income.taxtotal += income.taxes[key].tax;
+          const taxesForKey = Number(invoicesTotals.taxes[key].tax);
+          income.taxes[key].tax += taxesForKey;
+          income.taxtotal += taxesForKey;
         });
       }
     }
@@ -214,9 +215,12 @@ for (const file of files) {
     expenses.subtotal += Number(expenseTotals.subtotal);
     expenses.total += Number(expenseTotals.total);
     Object.keys(expenseTotals.taxes).forEach( function(key, index) {
-      if (!expenses.taxes.hasOwnProperty(key)) expenses.taxes[key] = 0;
-      expenses.taxes[key] += Number(expenseTotals.taxes[key]);
-      expenses.taxtotal += expenses.taxes[key];
+      const taxesForKey = Number(expenseTotals.taxes[key]);
+      if (taxesForKey > 0) {
+        if (!expenses.taxes.hasOwnProperty(key)) expenses.taxes[key] = 0;
+        expenses.taxes[key] += taxesForKey;
+        expenses.taxtotal += taxesForKey;
+      }
     });
   }
 }
